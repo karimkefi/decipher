@@ -1,5 +1,5 @@
 <?php
-
+//http://192.168.20.20/PHP/play/cipher/
 
 //-------CONSTANTS AND VARIABLES --------------------------------------------
 
@@ -12,9 +12,7 @@ $keyWordArr = str_split($keyWord);
 $adjustedAlphabet1 = newAlphabet($alphabetArr, $keyWordArr);
 var_dump($adjustedAlphabet1);
 
-
 //-------FUNCTIONS --------------------------------------------
-
 
 //Creating a re-ordered alphabet array which starts with key
 // and ends in remaining alphabet characters
@@ -22,7 +20,7 @@ function newAlphabet($alphabetArr, $keyWordArr) {
     //this compares array1 and array2 and returns array1 which are not present in array2
     $nonKeyCharacters = array_diff($alphabetArr, $keyWordArr);
 
-    //F.E creats a new alphabet starting with the key array and
+    //F.E loop creats a new alphabet starting with the key array and
     // adding on all the characters of the alphabet which
     // are not in the key array (i.e. re-ordered alphabet)
     foreach ($nonKeyCharacters as $addChar) {
@@ -36,7 +34,7 @@ function newAlphabet($alphabetArr, $keyWordArr) {
 function rotateDecypher($encryptedString, $alphabetArr) {
     for ($i = 0; $i < 27; $i++) {
         $decodedArr = [];
-        echo 'START: ' . $i . '- - - - - - -';
+        echo 'ROT' . $i . '- - - - - - -';
         
         foreach ($encryptedString as $inputletter) {
             if($inputletter == " ") {
@@ -67,43 +65,55 @@ function substituteDecypher($encryptedString, $alphabetArr, $alphabetArrEncrypte
     }
     
     $decodedString = implode("", $decodedArr);
-    echo $decodedString . '<br>'; 
-
     return $decodedString;
 }
 
 
+function letterToAsciBackToLetter($encryptedString) {
+    $decodedArr = [];
 
-function letterToAsciAddNumberBackToLetter($character) {
-    $adjustedCharacter = chr(ord($character) + 2);
-    echo $adjustedCharacter . '-';
-    return $adjustedCharacter;
+    foreach ($encryptedString as $inputletter) {
+        if($inputletter == " ") {
+            $decodedArrAll = array_push($decodedArr, " ");
+            continue;
+        };
+        $charFound = chr(ord($inputletter) + 30) ;
+        array_push($decodedArr, $charFound);
+    }
+
+    $decodedString = implode("", $decodedArr);
+    return $decodedString;
 }
 
+//-------ENCODED AND DECIPHERED --------------------------------------------
 
-echo '1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 x x x x x x' . '<br>';
+echo '- - - - - - - SIMPLE ROT - - - - - - - - - ' . '<br>';
 $inputString1 = 'kh lv qrw wkh phvvldkd kh lv d yhub qdxjkwb erb';
 $inputStringArr1 = str_split($inputString1);
 rotateDecypher($inputStringArr1, $alphabetArr);
 
+echo '- - - - - - - ROT AND REV - - - - - - - - - ' . '<br>';
+$inputString2 = 'borzsm fob nxk dyb k cs csrd';
+$inputStringArr2 = str_split(strrev($inputString2));
+rotateDecypher($inputStringArr2, $alphabetArr);
 
-echo '3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 x x x x' . '<br>';
-$inputString2 = 'pbzfsobp dkfobtpkx lq pbkfi ppbkfpry aoxtolc iixz lq abpr bobt pbzfsba cl bmvq obail bpbeq';
-$inputString3 = 'borzsm fob nxk dyb k cs csrd';
-$inputStringArr3 = str_split(strrev($inputString3));
-rotateDecypher($inputStringArr3, $alphabetArr);
-
-echo '4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 x x x x x' . '<br>';
+echo '- - - - - - - SUBSTITUTE CIPHER (WITH KEY) - - - - - - - - -' . '<br>';
 //test coded string with keyWord
-$inputString6 = 'dghvetpst bm ihvtl';
-$inputStringArr6 = str_split($inputString6);
-substituteDecypher($inputStringArr6, $alphabetArr, $adjustedAlphabet1);
+$inputString3 = 'dghvetpst bm ihvtl';
+$inputStringArr3 = str_split($inputString3);
+echo substituteDecypher($inputStringArr3, $alphabetArr, $adjustedAlphabet1) . '<br>';
 
-echo '5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 x x x x' . '<br>';
+echo '- - - - - - - ASCII CIPHER - - - - - - - - -' . '<br>';
+//move from Capital to lower case ascii
+$inputString4 = 'UVQR UJQWVKPI';
+$inputStringArr4 = str_split($inputString4);
+echo letterToAsciBackToLetter($inputStringArr4) . '<br>';
 
+echo '- - - - - - - MATRIX CIPHER - - - - - - - - -' . '<br>';
+$inputString5 = '';
+$inputStringArr5 = str_split($inputString5);
+echo letterToAsciBackToLetter($inputStringArr4) . '<br>';
 
-
-echo '6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 x x x x x' . '<br>';
 
 ?>
 
